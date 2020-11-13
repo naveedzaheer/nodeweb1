@@ -1,13 +1,14 @@
 # Name of the workflow
-name: Deploy to Web App
+name: Deploy WebApp
 
 on: [push]
 
 jobs:
-  #deploy web app
-  deploywebapp:
-    
-    # runs on linux
+  
+  #Web App Deploy
+  buildwebapp:
+
+    #Jobs
     runs-on: ubuntu-latest
 
     steps:
@@ -16,10 +17,19 @@ jobs:
         with:
             node-version: 12.x
       - run: npm install
+
+#Web App Deploy
+  deploywebapp:
+
+    #Jobs
+    runs-on: ubuntu-latest
+
+    needs: buildwebapp
+
+    steps:
       - uses: Azure/webapps-deploy@v2
         with:
           # Name of the Azure Web App
           app-name: nzgithubnodejs
           # Applies to Web Apps(Windows and Linux) and Web App Containers(linux). Multi container scenario not supported. Publish profile (*.publishsettings) file contents with Web Deploy secrets
-          publish-profile: ${{ secrets.PUBLISH_PROFILE  }}
-
+          publish-profile: ${{ secrets.PUBLISH_PROFILE  }}          
